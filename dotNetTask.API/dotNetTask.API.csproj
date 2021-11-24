@@ -10,10 +10,12 @@
     <None Remove="Data\" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Swashbuckle.AspNetCore" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Data\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.12" />

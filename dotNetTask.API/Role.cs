@@ -3,6 +3,7 @@ namespace dotNetTask.API
 {
     public enum EmployeeRoles
     {
+        CEO,
         Accounat,
         HRSpecialist,
         Programmer,

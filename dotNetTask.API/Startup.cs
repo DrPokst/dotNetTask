@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotNetTask.API.Data;
+using dotNetTask.API.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,7 @@ namespace dotNetTask.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EmployeeApi", Version = "v1" });
             });
             services.AddControllers();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
