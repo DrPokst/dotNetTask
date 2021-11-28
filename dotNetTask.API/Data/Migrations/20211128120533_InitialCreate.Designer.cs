@@ -36,7 +36,7 @@ namespace dotNetTask.API.Data.Migrations
                     b.Property<DateTime>("EmploymentDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FistName")
+                    b.Property<string>("FirstName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("HomeAddress")

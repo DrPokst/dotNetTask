@@ -6,7 +6,7 @@ namespace dotNetTask.API.Dtos
     public class EmployeeDto
     {
         public Guid Id { get; init; }
-        public string FistName { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirtDate { get; set; }
         public DateTime EmploymentDate { get; set; }

@@ -12,7 +12,7 @@ namespace dotNetTask.API.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FistName = table.Column<string>(type: "TEXT", nullable: true),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
                     BirtDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EmploymentDate = table.Column<DateTime>(type: "TEXT", nullable: false),
