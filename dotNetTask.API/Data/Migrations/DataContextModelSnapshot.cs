@@ -18,15 +18,15 @@ namespace dotNetTask.API.Data.Migrations
 
             modelBuilder.Entity("dotNetTask.API.Entities.Employee", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("BirtDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("BossId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("BossId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CurrentSalary")
                         .HasColumnType("INTEGER");

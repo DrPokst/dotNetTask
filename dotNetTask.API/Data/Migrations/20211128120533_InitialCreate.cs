@@ -11,13 +11,12 @@ namespace dotNetTask.API.Data.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     FistName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
                     BirtDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EmploymentDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    BossId = table.Column<int>(type: "INTEGER", nullable: true),
+                    BossId = table.Column<Guid>(type: "TEXT", nullable: true),
                     HomeAddress = table.Column<string>(type: "TEXT", nullable: true),
                     CurrentSalary = table.Column<int>(type: "INTEGER", nullable: false),
                     Role = table.Column<int>(type: "INTEGER", nullable: false)

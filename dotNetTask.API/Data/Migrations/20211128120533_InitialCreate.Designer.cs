@@ -9,7 +9,7 @@ using dotNetTask.API.Data;
 namespace dotNetTask.API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211123234000_InitialCreate")]
+    [Migration("20211128120533_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,15 +20,15 @@ namespace dotNetTask.API.Data.Migrations
 
             modelBuilder.Entity("dotNetTask.API.Entities.Employee", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("BirtDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("BossId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("BossId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CurrentSalary")
                         .HasColumnType("INTEGER");
