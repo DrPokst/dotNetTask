@@ -1,16 +1,23 @@
 ﻿using System;
-namespace dotNetTask.API.Entities
+using System.ComponentModel.DataAnnotations;
+
+namespace dotNetTask.API.Dtos
 {
-    public record Employee
+    public record CreateEmployeeDto
     {
-        public Guid Id { get; init; }
+        [Required]
         public string FistName { get; set; }
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public DateTime BirtDate { get; set; }
-        public DateTime EmploymentDate { get; set; }
-        public Employee Boss { get; set; }
+
+        public string Boss { get; set; }
+        [Required]
         public string HomeAddress { get; set; }
+        [Required]
         public int CurrentSalary { get; set; }
+        [Required]
         public EmployeeRoles Role { get; set; }
     }
 }
