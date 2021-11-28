@@ -10,7 +10,7 @@ namespace dotNetTask.API.Interfaces
         /// <summary>
         /// Gets all data about employee.
         /// </summary>
-        Task<Employee> GetEmployeeAsync(int employeeId);
+        Task<Employee> GetEmployeeAsync(Guid employeeId);
 
         /// <summary>
         /// Gets all employees with their data.
@@ -20,19 +20,23 @@ namespace dotNetTask.API.Interfaces
         /// <summary>
         /// Gets all employees by boss ID.
         /// </summary>
-        Task<IEnumerable<Employee>> GetEmployeesByBossIdAsync(int bossId);
+        Task<IEnumerable<Employee>> GetEmployeesByBossIdAsync(Guid bossId);
 
         /// <summary>
         /// Caunts employees and calculates average salary for particular Role.
         /// </summary>
         Task<int> GetCauntAndAvarageByRoleAsync(string role);
-
-        Task<Employee> UserExists(string user);
-        Task<Employee> AddNewEmployee(Employee employee);
-        Task<Employee> UpdateEmployee(Employee editedEmployee);
-        Task<bool> DeleteEmployee(int employeeId);
-        void Add<T>(T entity) where T : class;
-        void Delete<T>(T entity) where T : class;
-        Task<bool> SaveAll();
+        /// <summary>
+        /// Creates new employee.
+        /// </summary>
+        Task<Employee> AddNewEmployeeAsync(Employee employee);
+        /// <summary>
+        /// Updates employee with all employee data
+        /// </summary>
+        Task UpdateEmployeeAsync(Employee employee);
+        /// <summary>
+        /// Deletes employee
+        /// </summary>
+        Task DeleteEmployee(Guid employeeId);
     }
 }

@@ -16,7 +16,7 @@ namespace dotNetTask.API.Data
             _context = context;
         }
 
-        public async Task<Employee> GetEmployeeAsync(int employeeId)
+        public async Task<Employee> GetEmployeeAsync(Guid employeeId)
         {
             return await _context.Employees.FindAsync(employeeId);
         }
@@ -26,19 +26,23 @@ namespace dotNetTask.API.Data
             return await _context.Employees.ToListAsync();
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesByBossIdAsync(int bossId)
+        public async Task<IEnumerable<Employee>> GetEmployeesByBossIdAsync(Guid bossId)
         {
             return await _context.Employees.Where(u => u.Boss.Id == bossId).ToListAsync();
         }
 
-        public Task<Employee> AddNewEmployee(Employee employee)
+        public async Task<Employee> AddNewEmployeeAsync(Employee employee)
         {
-            throw new NotImplementedException();
+            await _context.Employees.AddAsync(employee);
+            await _context.SaveChangesAsync();
+            return employee;
         }
 
-        public Task<bool> DeleteEmployee(int employeeId)
+        public async Task DeleteEmployee(Guid employeeId)
         {
-            throw new NotImplementedException();
+            var employeeToDelete = await _context.Employees.FindAsync(employeeId);
+            _context.Employees.Remove(employeeToDelete);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<int> GetCauntAndAvarageByRoleAsync(string role)
@@ -50,35 +54,12 @@ namespace dotNetTask.API.Data
             return employeeCount;
         }
 
-        
-
-        
-
-        
-
-        public Task<Employee> UpdateEmployee(Employee editedEmployee)
+        public async Task UpdateEmployeeAsync(Employee employee)
         {
-            throw new NotImplementedException();
+            var employeeToUpdate = await _context.Employees.FindAsync(employee.Id);
+            employeeToUpdate = employee;
+            await _context.SaveChangesAsync();
         }
 
-        public Task<Employee> UserExists(string user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add<T>(T entity) where T : class
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SaveAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete<T>(T entity) where T : class
-        {
-            throw new NotImplementedException();
-        }
     }
 }
