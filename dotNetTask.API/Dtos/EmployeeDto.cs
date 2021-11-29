@@ -10,7 +10,7 @@ namespace dotNetTask.API.Dtos
         public string LastName { get; set; }
         public DateTime BirtDate { get; set; }
         public DateTime EmploymentDate { get; set; }
-        public string Boss { get; set; }
+        public Guid BossId { get; set; }
         public string HomeAddress { get; set; }
         public int CurrentSalary { get; set; }
         public EmployeeRoles Role { get; set; }

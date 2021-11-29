@@ -8,7 +8,8 @@ namespace dotNetTask.API.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Employee, EmployeeDto>();
+            CreateMap<Employee, EmployeeDto>()
+                .ForMember(dest => dest.BossId, opt => opt.MapFrom(s => s.Boss.Id));
             CreateMap<UpdateEmployeeDto, Employee>();
             
         }

@@ -45,13 +45,19 @@ namespace dotNetTask.API.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task<int> GetCauntAndAvarageByRoleAsync(string role)
+        public async Task<CountAndAverage> GetCauntAndAvarageByRoleAsync(string role)
         {
-            var roleId = (EmployeeRoles)Enum.Parse(typeof(EmployeeRoles), role); // ?????
+            var roleId = (EmployeeRoles)Enum.Parse(typeof(EmployeeRoles), role); 
             var employeesByRole = await _context.Employees.Where(u => u.Role == roleId).ToListAsync();
-            var employeeCount = employeesByRole.Count();
-            var averageSalary = employeesByRole.Average(u => u.CurrentSalary);
-            return employeeCount;
+
+            CountAndAverage countAndAverage = new()
+            {
+                Role = role,
+                Count = employeesByRole.Count(),
+                Average = employeesByRole.Average(u => u.CurrentSalary)
+            };
+
+            return countAndAverage;
         }
 
         public async Task UpdateEmployeeAsync(Employee employee)
@@ -61,5 +67,13 @@ namespace dotNetTask.API.Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> CheckIsCeoExistAsync()
+        {
+            var ceo = await _context.Employees.FirstOrDefaultAsync(u => u.Role == EmployeeRoles.CEO);
+            
+            if (ceo is null) return false;
+            
+            return true;
+        }
     }
 }

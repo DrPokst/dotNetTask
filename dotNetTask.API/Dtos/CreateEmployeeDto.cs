@@ -19,7 +19,7 @@ namespace dotNetTask.API.Dtos
         [Required]
         [ValidDate("2000/01/01", ErrorMessage = "Employment date can not be futute date and earlier than 2000-01-01")]
         public DateTime EmploymentDate { get; set; }
-        public string Boss { get; set; }
+        public Guid BossId { get; set; }
         [Required]
         public string HomeAddress { get; set; }
         [Required]

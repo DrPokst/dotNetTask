@@ -25,7 +25,7 @@ namespace dotNetTask.API.Interfaces
         /// <summary>
         /// Caunts employees and calculates average salary for particular Role.
         /// </summary>
-        Task<int> GetCauntAndAvarageByRoleAsync(string role);
+        Task<CountAndAverage> GetCauntAndAvarageByRoleAsync(string role);
         /// <summary>
         /// Creates new employee.
         /// </summary>
@@ -38,5 +38,6 @@ namespace dotNetTask.API.Interfaces
         /// Deletes employee
         /// </summary>
         Task DeleteEmployee(Guid employeeId);
+        Task<bool> CheckIsCeoExistAsync();
     }
 }
