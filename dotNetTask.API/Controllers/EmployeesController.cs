@@ -54,8 +54,6 @@ namespace dotNetTask.API.Controllers
 
             if (employeesFromRepository is null) return NotFound();
 
-            _logger.LogInfo("Example for log. Returning employees");
-
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeesFromRepository));
         }
 
