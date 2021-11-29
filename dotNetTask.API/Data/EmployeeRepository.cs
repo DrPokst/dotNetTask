@@ -75,5 +75,22 @@ namespace dotNetTask.API.Data
             
             return true;
         }
+
+        public async Task<IEnumerable<Employee>> GetEmployeesByNameAndDateIntervalAsync(string name, DateTime startDate, DateTime endDate)
+        {
+            var employeesByName = await _context.Employees.Where(u => u.FirstName == name).ToListAsync();
+
+            if(startDate != default(DateTime)) employeesByName = await _context.Employees.Where(u => u.FirstName == name).Where(u => u.BirtDate > startDate).ToListAsync();
+            if(endDate != default(DateTime)) employeesByName = await _context.Employees.Where(u => u.FirstName == name).Where(u => u.BirtDate < endDate).ToListAsync();
+
+            return employeesByName;
+        }
+
+        public async Task UpdateEmployeeSalary(Guid employeeId, int salary)
+        {
+            var employeefromRepository = await _context.Employees.FindAsync(employeeId);
+            employeefromRepository.CurrentSalary = salary;
+            await _context.SaveChangesAsync();
+        }
     }
 }

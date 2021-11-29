@@ -27,18 +27,27 @@ namespace dotNetTask.API.Controllers
         public async Task<ActionResult<EmployeeDto>> GetEmployeeAsync(Guid id)
         {
             var employeeFromRepository = await _employeeRepository.GetEmployeeAsync(id);
+
             if (employeeFromRepository is null) return NotFound();
+
             return Ok(_mapper.Map<EmployeeDto>(employeeFromRepository));
-            
         }
-        //pagal intervala
 
+        // GET api/employee/ByNameAndDateInterval/{name}
+        [HttpGet("ByNameAndDateInterval/{name}")]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployeesByNameAndDateIntervalAsync(string name, DateTime startDate, DateTime endDate)
+        {
+            var employeeFromRepository = await _employeeRepository.GetEmployeesByNameAndDateIntervalAsync(name, startDate, endDate);
 
-        //GET api/employee
+            return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeeFromRepository));
+        } 
+
+        //GET api/employeeß
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesAsync()
         {
             var employeesFromRepository = await _employeeRepository.GetEmployeesAsync();
+
             if (employeesFromRepository is null) return NotFound();
             
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeesFromRepository));
@@ -49,11 +58,12 @@ namespace dotNetTask.API.Controllers
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesByBossIdAsync(Guid bossId)
         {
             var employeeFromrepository = await _employeeRepository.GetEmployeesByBossIdAsync(bossId);
+
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeeFromrepository));
         }
 
         // GET api/employee/CountAndAverage/{role}
-        [HttpGet("/CountAndAvarage/{role}")]
+        [HttpGet("/CountAndAvarage/{role}")]  
         public async Task<ActionResult<CountAndAverage>> GetCauntAndAvarageByRoleAsync(string role)
         {
             var countAndAverageByRole = await _employeeRepository.GetCauntAndAvarageByRoleAsync(role);
@@ -104,11 +114,17 @@ namespace dotNetTask.API.Controllers
             return NoContent();
         }
 
-        // PATCH api/employee/salary
-        [HttpPatch]
-        public ActionResult UpdateEmployeeSalary()
+        // PUT api/employee/salary
+        [HttpPut("salary/{id}")]
+        public async Task<ActionResult> UpdateEmployeeSalary(Guid id, int salary)
         {
-            return Ok();
+            var existingEmployee = await _employeeRepository.GetEmployeeAsync(id);
+            
+            if (existingEmployee is null) return NotFound();
+
+            await _employeeRepository.UpdateEmployeeSalary(existingEmployee.Id, salary);
+
+            return NoContent();
         }
 
         // DELETE api/employee/{id}
