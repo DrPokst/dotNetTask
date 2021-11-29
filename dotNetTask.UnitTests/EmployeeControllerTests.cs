@@ -11,12 +11,14 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
+using LoggerService;
 
 namespace dotNetTask.UnitTests
 {
     public class EmployeeControllerTests
     {
         private readonly Mock<IEmployeeRepository> repositoryStub  = new();
+        private readonly Mock<ILoggerManager> loggerStub = new();
         private readonly MapperConfiguration mockMapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new AutoMapperProfiles());
@@ -29,7 +31,7 @@ namespace dotNetTask.UnitTests
             repositoryStub.Setup(repo => repo.GetEmployeeAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Employee)null);
 
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
             
             //Act
             var result = await controller.GetEmployeeAsync(Guid.NewGuid());
@@ -45,8 +47,8 @@ namespace dotNetTask.UnitTests
             repositoryStub.Setup(repo => repo.GetEmployeeAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(expectedEmployee);
 
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
-            
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
+
             //Act
             var actionResult = await controller.GetEmployeeAsync(Guid.NewGuid());
             var result = actionResult.Result as OkObjectResult;
@@ -66,7 +68,7 @@ namespace dotNetTask.UnitTests
             repositoryStub.Setup(repo => repo.GetEmployeesAsync())
                 .ReturnsAsync(expectedEmployees);
 
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
             
             //Act
             var actionResult = await controller.GetEmployeesAsync();
@@ -93,13 +95,14 @@ namespace dotNetTask.UnitTests
                 CurrentSalary = rand.Next(20000),
                 Role = EmployeeRoles.Other,
             };
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
+            
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
             
             //Act
             var actionResult = await controller.AddEmployeeAsync(employeeToCreate);
             
             //Assert
-            var createdEmployee = (actionResult.Result as CreatedAtActionResult).Value as Employee;
+            var createdEmployee = (actionResult.Result as CreatedAtActionResult).Value as EmployeeDto;
             employeeToCreate.Should().BeEquivalentTo(
                 createdEmployee,
                 options => options.ComparingByMembers<EmployeeDto>().ExcludingMissingMembers());
@@ -124,7 +127,7 @@ namespace dotNetTask.UnitTests
                 CurrentSalary = rand.Next(20000),
                 Role = EmployeeRoles.Receptionist
             };
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
             
             //Act
             var actionResult = await controller.UpdateEmployeeAsync(existingEmployee.Id, employeeToUpdate);
@@ -150,7 +153,7 @@ namespace dotNetTask.UnitTests
                 CurrentSalary = rand.Next(20000),
                 Role = EmployeeRoles.Programmer
             };
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
             
             //Act
             var actionResult = await controller.UpdateEmployeeAsync(Guid.NewGuid(), employeeToUpdate);
@@ -166,7 +169,7 @@ namespace dotNetTask.UnitTests
             repositoryStub.Setup(repo => repo.GetEmployeeAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(existingEmployee);
 
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
             
             //Act
             var actionResult = await controller.DeleteEmployeeAsync(existingEmployee.Id);
@@ -181,7 +184,7 @@ namespace dotNetTask.UnitTests
             repositoryStub.Setup(repo => repo.GetEmployeeAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Employee)null);
 
-            var controller = new EmployeeController(repositoryStub.Object, mockMapper.CreateMapper());
+            var controller = new EmployeesController(repositoryStub.Object, mockMapper.CreateMapper(), loggerStub.Object);
             
             //Act
             var actionResult = await controller.DeleteEmployeeAsync(Guid.NewGuid());

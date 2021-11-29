@@ -5,24 +5,28 @@ using AutoMapper;
 using dotNetTask.API.Dtos;
 using dotNetTask.API.Entities;
 using dotNetTask.API.Interfaces;
+using LoggerService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotNetTask.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EmployeeController : Controller
+    public class EmployeesController : Controller
     {
 
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
-        public EmployeeController(IEmployeeRepository employeeRepository, IMapper mapper)
+        private readonly ILoggerManager _logger;
+
+        public EmployeesController(IEmployeeRepository employeeRepository, IMapper mapper, ILoggerManager logger)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        //GET api/employee/{id}
+        //GET api/employees/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeDto>> GetEmployeeAsync(Guid id)
         {
@@ -33,27 +37,29 @@ namespace dotNetTask.API.Controllers
             return Ok(_mapper.Map<EmployeeDto>(employeeFromRepository));
         }
 
-        // GET api/employee/ByNameAndDateInterval/{name}
+        // GET api/employees/ByNameAndDateInterval/{name}
         [HttpGet("ByNameAndDateInterval/{name}")]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployeesByNameAndDateIntervalAsync(string name, DateTime startDate, DateTime endDate)
+        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesByNameAndDateIntervalAsync(string name, DateTime startDate, DateTime endDate)
         {
             var employeeFromRepository = await _employeeRepository.GetEmployeesByNameAndDateIntervalAsync(name, startDate, endDate);
 
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeeFromRepository));
         } 
 
-        //GET api/employeeß
+        //GET api/employees
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesAsync()
         {
             var employeesFromRepository = await _employeeRepository.GetEmployeesAsync();
 
             if (employeesFromRepository is null) return NotFound();
-            
+
+            _logger.LogInfo("Example for log. Returning employees");
+
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeesFromRepository));
         }
 
-        // GET api/employee/ByBossId/{bossId}
+        // GET api/employees/ByBossId/{bossId}
         [HttpGet("ByBossId/{bossId}")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesByBossIdAsync(Guid bossId)
         {
@@ -62,7 +68,7 @@ namespace dotNetTask.API.Controllers
             return Ok(_mapper.Map<IEnumerable<EmployeeDto>>(employeeFromrepository));
         }
 
-        // GET api/employee/CountAndAverage/{role}
+        // GET api/employees/CountAndAverage/{role}
         [HttpGet("/CountAndAvarage/{role}")]  
         public async Task<ActionResult<CountAndAverage>> GetCauntAndAvarageByRoleAsync(string role)
         {
@@ -71,15 +77,14 @@ namespace dotNetTask.API.Controllers
             return Ok(countAndAverageByRole);
         }
 
-        // POST api/employee
+        // POST api/employees
         [HttpPost]
-        public async Task<ActionResult<Employee>> AddEmployeeAsync(CreateEmployeeDto employeeDto)
+        public async Task<ActionResult<EmployeeDto>> AddEmployeeAsync(CreateEmployeeDto employeeDto)
         {
             if (employeeDto.Role == EmployeeRoles.CEO && await _employeeRepository.CheckIsCeoExistAsync()) return BadRequest("CEO exist");
 
             Employee getBoss = null;
             if (employeeDto.Role != EmployeeRoles.CEO) getBoss = await _employeeRepository.GetEmployeeAsync(employeeDto.BossId);
-            
             
             Employee employeeToCreate = new()
             {
@@ -96,10 +101,10 @@ namespace dotNetTask.API.Controllers
 
             var createdEmployee = await _employeeRepository.AddNewEmployeeAsync(employeeToCreate);
 
-            return CreatedAtAction(nameof(GetEmployeeAsync), new{ id = employeeToCreate.Id }, employeeToCreate);
+            return CreatedAtAction(nameof(GetEmployeeAsync), new{ id = employeeToCreate.Id }, _mapper.Map<EmployeeDto>(createdEmployee));
         }
 
-        // PUT api/employee/{id}
+        // PUT api/employees/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateEmployeeAsync(Guid id, UpdateEmployeeDto employeeDto)
         {
@@ -114,7 +119,7 @@ namespace dotNetTask.API.Controllers
             return NoContent();
         }
 
-        // PUT api/employee/salary
+        // PUT api/employees/salary
         [HttpPut("salary/{id}")]
         public async Task<ActionResult> UpdateEmployeeSalary(Guid id, int salary)
         {
@@ -127,7 +132,7 @@ namespace dotNetTask.API.Controllers
             return NoContent();
         }
 
-        // DELETE api/employee/{id}
+        // DELETE api/employees/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEmployeeAsync(Guid id)
         {

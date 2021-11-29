@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotNetTask.API\dotNetTask.API.csproj" />
+    <ProjectReference Include="..\LoggerService\LoggerService.csproj" />
   </ItemGroup>
 
 </Project>
