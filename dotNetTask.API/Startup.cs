@@ -38,7 +38,8 @@ namespace dotNetTask.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EmployeeApi", Version = "v1" });
             });
             services.AddAutoMapper(typeof(Startup));
-            services.AddControllers();
+            services.AddControllers(options => 
+                options.SuppressAsyncSuffixInActionNames = false);
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         }
 
